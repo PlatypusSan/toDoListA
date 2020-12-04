@@ -31,7 +31,9 @@ import okhttp3.Response;
 
 public class AddEventActivity extends AppCompatActivity {
 
-    Bundle arguments;
+    private int mode = 0;
+    private Bundle arguments;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +42,38 @@ public class AddEventActivity extends AppCompatActivity {
         setTitle("Add Event");
         TimePicker timePicker = (TimePicker) findViewById(R.id.timePickerFrom);
         timePicker.setIs24HourView(true);
-        timePicker = (TimePicker) findViewById(R.id.timePickerTo);
-        timePicker.setIs24HourView(true);
+        TimePicker timePicker2 = (TimePicker) findViewById(R.id.timePickerTo);
+        timePicker2.setIs24HourView(true);
         TextView date = (TextView) findViewById(R.id.date);
         arguments = getIntent().getExtras();
         date.setText(arguments.getString("date"));
+        mode = arguments.getInt("mode");
+
+        if (mode == 1) {
+            EditText name = (EditText) findViewById(R.id.add_event_name);
+            name.setText(arguments.getString("name"));
+
+            EditText description = (EditText) findViewById(R.id.add_event_description);
+            description.setText(arguments.getString("description"));
+
+            TimePicker timeFrom = (TimePicker) findViewById(R.id.timePickerFrom);
+            timeFrom.setHour(arguments.getInt("fromHour"));
+            timeFrom.setMinute(arguments.getInt("fromMinute"));
+
+            TimePicker timeTo = (TimePicker) findViewById(R.id.timePickerTo);
+
+            int q = arguments.getInt("toHour");
+            int p = arguments.getInt("toMinute");
+            timeTo.setHour(q);
+            timeTo.setMinute(p);
+
+
+
+        }
 
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public void onAddClick(View v) {
 
         EntityService entityService = EntityService.getInstance();
@@ -62,13 +86,20 @@ public class AddEventActivity extends AppCompatActivity {
 
         TimePicker timeFrom = (TimePicker) findViewById(R.id.timePickerFrom);
         TimePicker timeTo = (TimePicker) findViewById(R.id.timePickerTo);
+        System.out.println(timeFrom.getHour());
 
         int duration = (timeTo.getHour() - timeFrom.getHour()) * 60 + (timeTo.getMinute() - timeFrom.getMinute());
+
         try {
-            entityService.addEvent(new Event(duration, name, description,
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm z").parse(
+            Event event = new Event(duration, name, description,
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(
                             arguments.getString("date") + " " + timeFrom.getHour() + ":" +
-                                    timeFrom.getMinute() + " GMT+00:00"), null));
+                                    timeFrom.getMinute()), null);
+            if (mode == 0) {
+                entityService.addEvent(event);
+            } else {
+                entityService.putEvent(arguments.getLong("id"), event);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }

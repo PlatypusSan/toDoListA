@@ -47,6 +47,7 @@ public class EventAdapter extends ArrayAdapter<Event> {
         Date toDate = new Date(event.getDate().toString());
         toDate.setMinutes(toDate.getMinutes() + event.getDuration());
 
+
         dateView.setText(event.getDate().getHours() + ":" + (event.getDate().getMinutes() < 10
                 ? "0" + event.getDate().getMinutes() : event.getDate().getMinutes()) + "\n" +
                 toDate.getHours() + ":" + (toDate.getMinutes() < 10 ? "0" + toDate.getMinutes() :

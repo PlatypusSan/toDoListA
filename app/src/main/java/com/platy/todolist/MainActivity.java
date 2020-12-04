@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.platy.todolist.entities.EntityService;
+import com.platy.todolist.entities.Event;
 import com.platy.todolist.ui.main.EventListFragment;
 import com.platy.todolist.ui.main.SectionsPagerAdapter;
 
@@ -29,6 +30,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity implements EventListFragment.OnFragmentInteractionListener {
 
     Calendar dateAndTime = Calendar.getInstance();
+    private Datable datable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +49,14 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+        tabs.getTabAt(1).select();
 
 
     }
 
 
-
     public void onCalendarButtonClick(View v) {
-        new DatePickerDialog(MainActivity.this, d,
+        new DatePickerDialog(MainActivity.this, R.style.DialogTheme, d,
                 dateAndTime.get(Calendar.YEAR),
                 dateAndTime.get(Calendar.MONTH),
                 dateAndTime.get(Calendar.DAY_OF_MONTH))
@@ -74,11 +76,34 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
         }
     };
 
-    public void onFragmentInteraction(String link) {
+    public void onFragmentAdd(String link) {
 
         Intent intent = new Intent(this, AddEventActivity.class);
 
         intent.putExtra("date", link);
+        intent.putExtra("mode", 0);
+
+        startActivity(intent);
+    }
+
+    @Override
+    public void onFragmentPut(String link, Event event) {
+        Intent intent = new Intent(this, AddEventActivity.class);
+
+        intent.putExtra("date", link);
+        intent.putExtra("mode", 1);
+        intent.putExtra("name", event.getName());
+        intent.putExtra("description", event.getDescription());
+
+        intent.putExtra("fromHour", event.getDate().getHours());
+        intent.putExtra("fromMinute", event.getDate().getMinutes());
+
+        int q = event.getDate().getHours() + ((event.getDate().getMinutes() + event.getDuration()) / 60);
+        int p = ((event.getDuration() + event.getDate().getMinutes()) % 60);
+        intent.putExtra("toHour", q);
+        intent.putExtra("toMinute", p);
+        intent.putExtra("id", event.getId());
+
         startActivity(intent);
     }
 }

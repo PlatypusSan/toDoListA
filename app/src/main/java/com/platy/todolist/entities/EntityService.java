@@ -29,12 +29,10 @@ public class EntityService {
     private OkHttpClient client = new OkHttpClient();
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    private List<Event> eventList;
     private static EntityService instance;
 
 
     private EntityService() {
-        eventList = new ArrayList<>();
     }
 
 
@@ -45,13 +43,6 @@ public class EntityService {
         return instance;
     }
 
-    public void setEventList(List<Event> eventList) {
-        this.eventList = eventList;
-    }
-
-    public List<Event> getEventList() {
-        return eventList;
-    }
 
     public List<Event> getEvents() {
         List<Event> eventList = new ArrayList<>();
@@ -78,10 +69,69 @@ public class EntityService {
         return eventList;
     }
 
+    public void putEvent(long id, Event event) {
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setDateFormat(df);
+
+        String json = null;
+        try {
+            json = mapper.writeValueAsString(event);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        RequestBody body = RequestBody.create(JSON, json); // new
+        // RequestBody body = RequestBody.create(JSON, json); // old
+        Request request = new Request.Builder()
+                .url("http://192.168.43.253:8080/events/" + id)
+                .put(body)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                final String stackTrace = e.getMessage();
+                e.printStackTrace();
+
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                }
+            }
+        });
+    }
+
+    public Event getEvent(long id) {
+
+        Event event = null;
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setDateFormat(df);
+
+        Response response;
+        Request request = new Request.Builder()
+                .url("http://192.168.43.253:8080/event/" + id)
+                .build();
+
+        try {
+            response = client.newCall(request).execute();
+            event = mapper.readValue(response.body().string(), Event.class);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return event;
+    }
+
     public List<Event> getEventsByDate(String date) {
         List<Event> eventList = new ArrayList<>();
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         ObjectMapper mapper = new ObjectMapper();
         mapper.setDateFormat(df);
 
@@ -105,7 +155,7 @@ public class EntityService {
 
     public void addEvent(Event event) {
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         ObjectMapper mapper = new ObjectMapper();
         mapper.setDateFormat(df);
 
