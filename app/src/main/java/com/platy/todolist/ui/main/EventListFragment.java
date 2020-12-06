@@ -55,6 +55,8 @@ public class EventListFragment extends Fragment implements Datable {
 
     }
 
+
+
     public interface OnFragmentInteractionListener {
 
         void onFragmentAdd(String link);
@@ -81,6 +83,10 @@ public class EventListFragment extends Fragment implements Datable {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         thisFragment = this;
+        EventAdapter.eventListFragment = this;
+        EventAdapter.ft = getFragmentManager().beginTransaction();
+
+
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
 
         entityService = EntityService.getInstance();

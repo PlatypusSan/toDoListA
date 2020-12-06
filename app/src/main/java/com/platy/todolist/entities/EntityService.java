@@ -44,6 +44,9 @@ public class EntityService {
     }
 
 
+
+
+
     public List<Event> getEvents() {
         List<Event> eventList = new ArrayList<>();
 
@@ -67,6 +70,38 @@ public class EntityService {
         }
 
         return eventList;
+    }
+
+    public void putSubTask(String taskName, SubTask subTask) {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        String json = null;
+        try {
+            json = mapper.writeValueAsString(subTask);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        RequestBody body = RequestBody.create(JSON, json); // new
+        // RequestBody body = RequestBody.create(JSON, json); // old
+        Request request = new Request.Builder()
+                .url("http://192.168.43.253:8080/tasks/" + taskName + "/subtasks")
+                .put(body)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                final String stackTrace = e.getMessage();
+                e.printStackTrace();
+
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                }
+            }
+        });
     }
 
     public void putEvent(long id, Event event) {
@@ -101,6 +136,27 @@ public class EntityService {
                 }
             }
         });
+    }
+
+    public List<Task> getTasks() {
+        List<Task> taskList = new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
+
+        Response response;
+        Request request = new Request.Builder()
+                .url("http://192.168.43.253:8080/tasks")
+                .build();
+
+        try {
+            response = client.newCall(request).execute();
+            taskList = mapper.readValue(response.body().string(), new TypeReference<List<Task>>() {
+            });
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return taskList;
     }
 
     public Event getEvent(long id) {

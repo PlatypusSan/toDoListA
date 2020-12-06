@@ -12,6 +12,8 @@ import com.platy.todolist.R;
 
 import java.util.Date;
 
+import okhttp3.internal.concurrent.Task;
+
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
@@ -43,7 +45,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 
         switch (position) {
-            case 0: return PlaceholderFragment.newInstance(position + 1);
+            case 0: return TaskListFragment.newInstance(mContext);
             case 1: return EventListFragment.newInstance(today, mContext);
             case 2: return EventListFragment.newInstance(tomorrow, mContext);
 
