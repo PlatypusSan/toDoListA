@@ -138,6 +138,31 @@ public class EntityService {
         });
     }
 
+    public Task getTask(String taskName) {
+
+        Task task = null;
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setDateFormat(df);
+
+        Response response;
+        Request request = new Request.Builder()
+                .url("http://192.168.43.253:8080/tasks/" + taskName)
+                .build();
+
+        try {
+            response = client.newCall(request).execute();
+            task = mapper.readValue(response.body().string(), Task.class);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return task;
+    }
+
     public List<Task> getTasks() {
         List<Task> taskList = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
@@ -209,6 +234,38 @@ public class EntityService {
         return eventList;
     }
 
+    public void addTask(Task task) {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        String json = null;
+        try {
+            json = mapper.writeValueAsString(task);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        RequestBody body = RequestBody.create(JSON, json); // new
+        // RequestBody body = RequestBody.create(JSON, json); // old
+        Request request = new Request.Builder()
+                .url("http://192.168.43.253:8080/tasks")
+                .post(body)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                final String stackTrace = e.getMessage();
+                e.printStackTrace();
+
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                }
+            }
+        });
+    }
+
     public void addEvent(Event event) {
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -226,6 +283,38 @@ public class EntityService {
         // RequestBody body = RequestBody.create(JSON, json); // old
         Request request = new Request.Builder()
                 .url("http://192.168.43.253:8080/events")
+                .post(body)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                final String stackTrace = e.getMessage();
+                e.printStackTrace();
+
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                }
+            }
+        });
+    }
+
+    public void addSubTask(String taskName, SubTask subTask) {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        String json = null;
+        try {
+            json = mapper.writeValueAsString(subTask);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        RequestBody body = RequestBody.create(JSON, json); // new
+        // RequestBody body = RequestBody.create(JSON, json); // old
+        Request request = new Request.Builder()
+                .url("http://192.168.43.253:8080/tasks/" + taskName + "/subtasks")
                 .post(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {

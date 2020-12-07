@@ -2,10 +2,11 @@ package com.platy.todolist.entities;
 
 import androidx.annotation.NonNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Task {
 
     @JsonProperty("name")

@@ -4,17 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.TaskListFragment">
+    tools:context=".ui.main.TaskListFragment"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="6dp">
 
         <ListView
             android:id="@+id/taskListView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:dividerHeight="6.0sp"
+            android:divider="@android:color/transparent">
 
         </ListView>
 
@@ -24,7 +30,8 @@
             android:layout_height="wrap_content"
             android:text="Add Task"
             android:textColor="#ffffff"
-            app:backgroundTint="?attr/colorPrimary">
+            app:backgroundTint="?attr/colorPrimary"
+            >
 
 
         </Button>

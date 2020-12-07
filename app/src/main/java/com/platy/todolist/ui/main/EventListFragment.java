@@ -18,6 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.platy.todolist.AddEventActivity;
 import com.platy.todolist.Datable;
+import com.platy.todolist.EventComparator;
 import com.platy.todolist.R;
 import com.platy.todolist.entities.EntityService;
 import com.platy.todolist.entities.Event;
@@ -72,6 +73,7 @@ public class EventListFragment extends Fragment implements Datable {
                     + " должен реализовывать интерфейс OnFragmentInteractionListener");
         }
     }
+
     public void addEventActivityStart() {
         mListener.onFragmentAdd(getArguments().getString(ARG_DATE));
     }
@@ -96,6 +98,7 @@ public class EventListFragment extends Fragment implements Datable {
         eventListView = (ListView) view.findViewById(R.id.eventList);
         eventAdapter = new EventAdapter(context, R.layout.event_list_element, eventList);
         eventListView.setAdapter(eventAdapter);
+        eventAdapter.sort(new EventComparator());
         eventListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
 
             @Override
@@ -145,11 +148,5 @@ public class EventListFragment extends Fragment implements Datable {
         eventAdapter.remove(event);
         putEvent = event;
         putEventActivityStart();
-
-
-        /*final FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(thisFragment);
-        ft.attach(thisFragment);
-        ft.commit();*/
     }
 }

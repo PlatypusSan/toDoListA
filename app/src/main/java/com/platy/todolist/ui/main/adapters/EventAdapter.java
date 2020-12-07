@@ -1,5 +1,6 @@
 package com.platy.todolist.ui.main.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -36,8 +37,10 @@ public class EventAdapter extends ArrayAdapter<Event> {
     private Context context;
     private List<SubTask> subTaskList;
     private EntityService entityService;
+    private boolean isSelect = true;
     public static EventListFragment eventListFragment;
     public static FragmentTransaction ft;
+
 
 
     public EventAdapter(Context context, int resource, List<Event> states) {
@@ -48,6 +51,7 @@ public class EventAdapter extends ArrayAdapter<Event> {
         this.inflater = LayoutInflater.from(context);
     }
 
+    @SuppressLint("DefaultLocale")
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View view = inflater.inflate(this.layout, parent, false);
@@ -60,6 +64,7 @@ public class EventAdapter extends ArrayAdapter<Event> {
         LinearLayout taskSpinner = (LinearLayout) view.findViewById(R.id.task_spinner);
 
         final Event event = events.get(position);
+        //spinner
         if (event.getTask() != null) {
             //final Event eventToUpdate = entityService.getEvent(event.getId());
             Drawable border = ContextCompat.getDrawable(view.getContext(), R.drawable.customborder);
@@ -70,12 +75,13 @@ public class EventAdapter extends ArrayAdapter<Event> {
 
             subTaskList = event.getTask().getSubTasks();
             List<String> nameList = new ArrayList<>();
+            nameList.add("Choose completed one");
             for (SubTask s: subTaskList) {
                 if (!s.isCompleted()){
                     nameList.add(s.getName());
                 }
             }
-            if (nameList.size() == 0) {
+            if (nameList.size() == 1) {
                 nameList.add("All is done!");
             }
 
@@ -92,7 +98,10 @@ public class EventAdapter extends ArrayAdapter<Event> {
             AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                    if (isSelect){
+                        isSelect = false;
+                        return;
+                    }
                     System.out.println(parent.getItemAtPosition(position));
                     for (int i = 0; i < subTaskList.size(); i++) {
                         if (subTaskList.get(i).getName().equals(parent.getItemAtPosition(position))) {
@@ -104,7 +113,6 @@ public class EventAdapter extends ArrayAdapter<Event> {
                             ft.commit();
                         }
                     }
-                    System.out.println(subTaskList.get(position));
                 }
 
                 @Override
@@ -131,11 +139,14 @@ public class EventAdapter extends ArrayAdapter<Event> {
         Date toDate = new Date(event.getDate().toString());
         toDate.setMinutes(toDate.getMinutes() + event.getDuration());
 
+        String date = String.format("%d:%s\n%d:%s",
+                event.getDate().getHours(),
+                (event.getDate().getMinutes() < 10 ? "0" + event.getDate().getMinutes() : event.getDate().getMinutes()).toString(),
+                toDate.getHours(),
+                (toDate.getMinutes() < 10 ? "0" + toDate.getMinutes() : toDate.getMinutes()).toString()
+                );
 
-        dateView.setText(event.getDate().getHours() + ":" + (event.getDate().getMinutes() < 10
-                ? "0" + event.getDate().getMinutes() : event.getDate().getMinutes()) + "\n" +
-                toDate.getHours() + ":" + (toDate.getMinutes() < 10 ? "0" + toDate.getMinutes() :
-                toDate.getMinutes()));
+        dateView.setText(date);
         nameView.setText(event.getName());
         descriptionView.setText(event.getDescription());
 

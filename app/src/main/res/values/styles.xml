@@ -19,5 +19,13 @@
     <style name="DialogTheme" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
-
+    <style name="CustomDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@color/colorAccent</item>
+        <item name="colorAccent">@android:color/primary_text_light</item>
+        <item name="android:textColorPrimary">@android:color/primary_text_light</item>
+    </style>
+    <style name="check" parent="Theme.AppCompat">
+        <item name="colorAccent">#474747</item>
+        <item name="android:buttonTint">#474747</item>
+    </style>
 </resources>

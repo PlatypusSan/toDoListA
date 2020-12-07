@@ -53,17 +53,13 @@ public class EventDialogFragment extends DialogFragment {
 
         String[] menu = {"Edit", "Delete"};
 
-        //View view = inflater.inflate(R.layout.fragment_task_list, container, false);
-
         final ArrayAdapter<String> adapter = new ArrayAdapter(context,
                 android.R.layout.simple_list_item_1, menu);
-//android.R.layout.select_dialog_singlechoice
-        //countriesList.setAdapter(adapter);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomDialogTheme);
         return builder
                 .setTitle(getArguments().getString("name"))
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(R.drawable.icon)
                 .setView(R.layout.dialog)
                 .setAdapter(adapter, new DialogInterface.OnClickListener(){
                     @Override
@@ -81,13 +77,7 @@ public class EventDialogFragment extends DialogFragment {
                         }
                     }
                 })
-                /*.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
-                .setNegativeButton("Отмена", null)*/
+                .setNegativeButton("Отмена", null)
                 .create();
 
 

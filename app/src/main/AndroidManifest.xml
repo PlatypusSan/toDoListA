@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ViewEventListActivity"></activity>
+        <activity android:name=".AddTaskActivity"></activity>
+        <activity android:name=".SubTaskActivity" />
+        <activity android:name=".ViewEventListActivity" />
         <activity android:name=".AddEventActivity" />
         <activity
             android:name=".MainActivity"

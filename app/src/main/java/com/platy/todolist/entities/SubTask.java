@@ -28,6 +28,12 @@ public class SubTask {
         this.completed = completed;
     }
 
+    public SubTask(String name, String description, boolean completed) {
+        this.name = name;
+        this.description = description;
+        this.completed = completed;
+    }
+
     public long getId() {
         return id;
     }

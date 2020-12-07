@@ -103,6 +103,9 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
         intent.putExtra("toHour", q);
         intent.putExtra("toMinute", p);
         intent.putExtra("id", event.getId());
+        if(event.getTask() != null){
+            intent.putExtra("taskName", event.getTask().getName());
+        }
 
         startActivity(intent);
     }
