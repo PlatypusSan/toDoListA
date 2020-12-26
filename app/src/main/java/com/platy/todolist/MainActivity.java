@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
         EntityService entityService = EntityService.getInstance();
         entityService.getEvents();
 
-
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);

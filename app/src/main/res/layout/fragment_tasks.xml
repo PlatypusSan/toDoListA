@@ -31,10 +31,8 @@
             android:text="Add Task"
             android:textColor="#ffffff"
             app:backgroundTint="?attr/colorPrimary"
-            >
+            />
 
-
-        </Button>
     </LinearLayout>
 
 

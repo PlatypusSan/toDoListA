@@ -51,6 +51,7 @@ public class SubTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 SubTask subTask = new SubTask(editText.getText().toString(), "", false);
+                editText.setText("");
                 entityService.addSubTask(task.getName(), subTask);
                 adapter.add(subTask);
 
